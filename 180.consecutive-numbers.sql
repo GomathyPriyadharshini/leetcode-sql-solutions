@@ -65,15 +65,18 @@
 
 -- @lc code=start
 # Write your MySQL query statement below
-SELECT DISTINCT num AS ConsecutiveNums
-FROM (
-    SELECT 
-        num,
-        LEAD(num, 1) OVER (ORDER BY id) AS n1,
-        LEAD(num, 2) OVER (ORDER BY id) AS n2
-    FROM Logs
-) t
-WHERE num = n1 AND num = n2;
+
+
+select round(sum(tiv_2016),2) as tiv_2016 from 
+(
+    select tiv_2016,
+    count(*) over (partition by tiv_2015) as ct_2015,
+    count(*) over (partition by lat,lon) as ct_lat_lon
+    from insurance
+
+)a
+where ct_2015>1
+and ct_lat_lon=1
 
 
 -- @lc code=end
